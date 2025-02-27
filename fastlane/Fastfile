@@ -1,4 +1,5 @@
 # fastlane/Fastfile
+NOTIF_PROJ_TARGET = "notificationsvc"
 default_platform :ios
 platform :ios do
   desc "Fetching or creating certificates in Apple Developer"
