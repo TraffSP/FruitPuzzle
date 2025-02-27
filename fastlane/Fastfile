@@ -52,14 +52,25 @@ platform :ios do
   desc "Updating project Team ID and Provision Profiles"
   lane :update_project do
     update_code_signing_settings(
-      use_automatic_signing: false,
-      path: ENV['XCODE_PROJ'],
-      targets: ENV['MAIN_TARGET'],
-      team_id: ENV["TEAM_ID"],
-      bundle_identifier: ENV['BASE_BUNDLE'],
-      code_sign_identity: "Apple Distribution",
-      profile_name: ENV["MAIN_TARGET"]
-    )
+    use_automatic_signing: false,
+    path: ENV['XCODE_PROJ'],
+    targets: ENV['MAIN_TARGET'],
+    team_id: ENV["TEAM_ID"],
+    bundle_identifier: BASE_BUNDLE,
+    code_sign_identity: "Apple Distribution",
+    profile_name: provisioning_profiles[BASE_BUNDLE]
+  )
+  
+  # Extension
+  update_code_signing_settings(
+    use_automatic_signing: false,
+    path: ENV['XCODE_PROJ'],
+    targets: NOTIF_PROJ_TARGET,
+    team_id: ENV["TEAM_ID"],
+    bundle_identifier: "#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}",
+    code_sign_identity: "Apple Distribution",
+    profile_name: provisioning_profiles["#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}"]
+  )
   end
   desc "Build App without bitcode"
   lane :build do
