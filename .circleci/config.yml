@@ -1,14 +1,26 @@
 version: 2.1
+
 orbs:
   macos: circleci/macos@2.0
+  ruby: circleci/ruby@2.1
+
+parameters:
+  deploy-type:
+    type: enum
+    default: "appstore"
+    enum: ["appstore", "testflight"]
+
 workflows:
   version: 2
   appstore-submit:
     jobs:
       - appstore_submit:
+          context: 
+            - ios-credentials
           filters:
             branches:
               only: main
+
 jobs:
   appstore_submit:
     macos:
@@ -16,16 +28,22 @@ jobs:
     
     environment:
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: appstore_submit
-      
+      FASTLANE_LANE: << pipeline.parameters.deploy-type >>
+    
     steps:
       - checkout
       
+      - ruby/install-deps:
+          key: gems-v1
+      
       - run:
-          name: Install Dependencies
+          name: Create .env file with secrets
           command: |
-            gem install bundler
-            bundle install
+            echo "APPLE_ID=$APPLE_ID" >> .env
+            echo "APP_IDENTIFIER=$APP_IDENTIFIER" >> .env
+            echo "TEAM_ID=$TEAM_ID" >> .env
+            echo "MATCH_PASSWORD=$MATCH_PASSWORD" >> .env
+            echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> .env
       
       - run:
           name: Run Fastlane
@@ -34,3 +52,6 @@ jobs:
       - store_artifacts:
           path: output
           destination: output-artifacts
+      
+      - store_test_results:
+          path: output/scan
