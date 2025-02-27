@@ -45,7 +45,6 @@ jobs:
             echo "BASE_BUNDLE=$BASE_BUNDLE" >> .env
             echo "TEAM_ID=$TEAM_ID" >> .env
             echo "PROJ_SCHEME=$PROJ_SCHEME" >> .env
-            echo "NOTIF_PROJ_TARGET=$NOTIF_PROJ_TARGET" >> .env
             echo "MAIN_TARGET=$MAIN_TARGET" >> .env
             echo "XCODE_PROJ=$XCODE_PROJ" >> .env
             echo "APPSTORE_APP_VER=$APPSTORE_APP_VER" >> .env
