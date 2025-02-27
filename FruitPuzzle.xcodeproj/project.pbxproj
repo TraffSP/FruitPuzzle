@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC5101FC2D7105EE006BA232 /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = AC5101FB2D7105EE006BA232 /* AppsFlyerLib */; };
 		D5789AE62D6F549E004527CF /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D5789AE52D6F549E004527CF /* RealmSwift */; };
 		D5789AE92D6F5589004527CF /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D5789AE82D6F5589004527CF /* FirebaseAnalytics */; };
 		D5789AEB2D6F5589004527CF /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = D5789AEA2D6F5589004527CF /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -54,7 +55,6 @@
 		D5789B612D6F689C004527CF /* RealmStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5789B372D6F689C004527CF /* RealmStorage.swift */; };
 		D5789B622D6F689C004527CF /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5789B392D6F689C004527CF /* AnalyticsService.swift */; };
 		D5789B652D6F68B4004527CF /* SdkPushExpress in Frameworks */ = {isa = PBXBuildFile; productRef = D5789B642D6F68B4004527CF /* SdkPushExpress */; };
-		D5789B682D6F68CC004527CF /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = D5789B672D6F68CC004527CF /* AppsFlyerLib */; };
 		D5789B752D6F6A31004527CF /* notificationsvc.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D5789B6E2D6F6A31004527CF /* notificationsvc.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D5789B7D2D6F6A5A004527CF /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5789B7C2D6F6A5A004527CF /* AdSupport.framework */; };
 		D5789B7F2D6F6A6E004527CF /* SdkPushExpress in Frameworks */ = {isa = PBXBuildFile; productRef = D5789B7E2D6F6A6E004527CF /* SdkPushExpress */; };
@@ -154,10 +154,10 @@
 			files = (
 				D5789AE92D6F5589004527CF /* FirebaseAnalytics in Frameworks */,
 				D5789B652D6F68B4004527CF /* SdkPushExpress in Frameworks */,
+				AC5101FC2D7105EE006BA232 /* AppsFlyerLib in Frameworks */,
 				D5789AF12D6F5589004527CF /* FirebaseAuthCombine-Community in Frameworks */,
 				D5789AEF2D6F5589004527CF /* FirebaseAuth in Frameworks */,
 				D5789AF72D6F5589004527CF /* FirebaseFunctions in Frameworks */,
-				D5789B682D6F68CC004527CF /* AppsFlyerLib in Frameworks */,
 				D5789B7D2D6F6A5A004527CF /* AdSupport.framework in Frameworks */,
 				D5789AEB2D6F5589004527CF /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				D5789AF32D6F5589004527CF /* FirebaseCore in Frameworks */,
@@ -469,7 +469,7 @@
 				D5789AF62D6F5589004527CF /* FirebaseFunctions */,
 				D5789AF82D6F5589004527CF /* FirebaseRemoteConfig */,
 				D5789B642D6F68B4004527CF /* SdkPushExpress */,
-				D5789B672D6F68CC004527CF /* AppsFlyerLib */,
+				AC5101FB2D7105EE006BA232 /* AppsFlyerLib */,
 			);
 			productName = PuzzlePustry2;
 			productReference = D55BA3652D672F67003617D2 /* FruitPuzzle.app */;
@@ -527,7 +527,7 @@
 				D5789AE42D6F549E004527CF /* XCRemoteSwiftPackageReference "realm-swift" */,
 				D5789AE72D6F5589004527CF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D5789B632D6F68B4004527CF /* XCRemoteSwiftPackageReference "pushexpress-swift-sdk" */,
-				D5789B662D6F68CC004527CF /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
+				AC5101FA2D7105EE006BA232 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
 			);
 			productRefGroup = D55BA3662D672F67003617D2 /* Products */;
 			projectDirPath = "";
@@ -646,6 +646,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FruitPuzzle/FruitPuzzle.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -669,6 +670,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.barankalay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -685,6 +687,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FruitPuzzle/FruitPuzzle.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -708,6 +711,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.barankalay;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -930,6 +934,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AC5101FA2D7105EE006BA232 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.16.1;
+			};
+		};
 		D5789AE42D6F549E004527CF /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -954,17 +966,14 @@
 				kind = branch;
 			};
 		};
-		D5789B662D6F68CC004527CF /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.16.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AC5101FB2D7105EE006BA232 /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AC5101FA2D7105EE006BA232 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
+		};
 		D5789AE52D6F549E004527CF /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D5789AE42D6F549E004527CF /* XCRemoteSwiftPackageReference "realm-swift" */;
@@ -1019,11 +1028,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D5789B632D6F68B4004527CF /* XCRemoteSwiftPackageReference "pushexpress-swift-sdk" */;
 			productName = SdkPushExpress;
-		};
-		D5789B672D6F68CC004527CF /* AppsFlyerLib */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D5789B662D6F68CC004527CF /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
-			productName = AppsFlyerLib;
 		};
 		D5789B7E2D6F6A6E004527CF /* SdkPushExpress */ = {
 			isa = XCSwiftPackageProductDependency;
