@@ -1,0 +1,122 @@
+# fastlane/Fastfile
+default_platform :ios
+platform :ios do
+  desc "Fetching or creating certificates in Apple Developer"
+
+  desc "Removing old certificates and profiles"
+  lane :remove_certs do
+    api_key = app_store_connect_api_key(
+      key_id: ENV['API_KEY_ID'],
+      issuer_id: ENV['API_ISSUER_ID'],
+      key_filepath: ENV['API_KEY_FILEPATH']
+    )
+
+    match_nuke(
+      type: "appstore",
+      git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
+      git_branch: ENV['PROJ_SCHEME'],
+      git_full_name: ENV['GIT_FULL_NAME'],
+      git_user_email: ENV['GIT_USER_EMAIL'],
+      app_identifier: [ENV['BASE_BUNDLE'], "#{ENV['BASE_BUNDLE']}.#{NOTIF_PROJ_TARGET}"],
+      profile_name: ENV['MAIN_TARGET'],
+      output_path: 'fastlane/provision',
+      readonly: false,
+      skip_confirmation: true,
+      api_key: api_key
+    )
+  end
+
+  lane :manage_provision do
+    api_key = app_store_connect_api_key(
+      key_id: ENV['API_KEY_ID'],
+      issuer_id: ENV['API_ISSUER_ID'],
+      key_filepath: ENV['API_KEY_FILEPATH']
+    )
+    # Отримання або створення профілів для App Store (розповсюдження)
+    match(
+      type: "appstore",
+      git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
+      git_branch: ENV['PROJ_SCHEME'],
+      git_full_name: ENV['GIT_FULL_NAME'],
+      git_user_email: ENV['GIT_USER_EMAIL'],
+      app_identifier: [ENV['BASE_BUNDLE'], "#{ENV['BASE_BUNDLE']}.#{NOTIF_PROJ_TARGET}"],
+      profile_name: ENV['MAIN_TARGET'],
+      output_path: 'fastlane/provision',
+      readonly: false,
+      api_key: api_key
+    )
+  end
+  desc "Updating project Team ID and Provision Profiles"
+  lane :update_project do
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: ENV['XCODE_PROJ'],
+      targets: ENV['MAIN_TARGET'],
+      team_id: ENV["TEAM_ID"],
+      bundle_identifier: ENV['BASE_BUNDLE'],
+      code_sign_identity: "Apple Distribution",
+      profile_name: ENV["MAIN_TARGET"]
+    )
+  end
+  desc "Build App without bitcode"
+  lane :build do
+    build_app(
+      scheme: ENV['PROJ_SCHEME'],
+      project: ENV['XCODE_PROJ'],
+      include_bitcode: false,
+      include_symbols: false,
+      export_method: "app-store", # Вказуємо метод експорту для розповсюдження
+      configuration: "Release"    # Вказуємо конфігурацію збірки
+    )
+  end
+  desc "Upload metadata, screenshots and build to App Store Connect, then submit for review"
+  lane :submit_build do
+    deliver(
+      skip_metadata: true,
+      skip_screenshots: true,
+      screenshots_path: 'fastlane/design',
+      metadata_path: "fastlane/metadata",
+      submission_information: {
+        export_compliance_available_on_french_store: false,
+        export_compliance_contains_proprietary_cryptography: false,
+        export_compliance_contains_third_party_cryptography: false,
+        export_compliance_is_exempt: false,
+        export_compliance_uses_encryption: false,
+        export_compliance_app_type: nil,
+        export_compliance_encryption_updated: false,
+        export_compliance_compliance_required: false,
+        export_compliance_platform: "ios",
+        content_rights_contains_third_party_content: false,
+        content_rights_has_rights: false,
+        add_id_info_limits_tracking: false,
+        add_id_info_serves_ads: false,
+        add_id_info_tracks_action: false,
+        add_id_info_tracks_install: false,
+        add_id_info_uses_idfa: true,
+      },
+      reject_if_possible: false,
+      overwrite_screenshots: true,
+      run_precheck_before_submit: true,
+      precheck_include_in_app_purchases: false,
+      submit_for_review: false, #temporary
+      automatic_release: true,
+      precheck_default_rule_level: ":warn", #:error
+      force: true
+    )
+  end
+  desc "Build, sign and upload a new build to the App Store."
+  desc "This will do the following:"
+  desc ""
+  desc "- Create new screenshots and store them in `./fastlane/screenshots`"
+  desc "- Collect the app metadata from `./fastlane/metadata`"
+  desc "- Upload screenshots + app metadata"
+  desc "- Build, sign and upload the app"
+  desc "- Submit the app for review"
+  lane :appstore_submit do
+    # remove_certs
+    manage_provision
+    update_project
+    build
+    submit_build
+  end
+end

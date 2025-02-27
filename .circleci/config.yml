@@ -8,7 +8,7 @@ workflows:
       - appstore_submit:
           filters:
             branches:
-              only: appstore
+              only: main
 jobs:
   appstore_submit:
     macos:
