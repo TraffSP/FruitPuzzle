@@ -120,3 +120,4 @@ platform :ios do
     submit_build
   end
 end
+
