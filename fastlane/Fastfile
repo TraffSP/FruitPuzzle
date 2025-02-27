@@ -1,5 +1,6 @@
 # fastlane/Fastfile
 NOTIF_PROJ_TARGET = "notificationsvc"
+BASE_BUNDLE = "com.barankalay"
 default_platform :ios
 platform :ios do
   desc "Fetching or creating certificates in Apple Developer"

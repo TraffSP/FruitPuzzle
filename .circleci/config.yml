@@ -42,7 +42,6 @@ jobs:
             echo "FASTLANE_USER=$FASTLANE_USER" >> .env
             echo "FASTLANE_PASSWORD=$FASTLANE_PASSWORD" >> .env
             echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> .env
-            echo "BASE_BUNDLE=$BASE_BUNDLE" >> .env
             echo "TEAM_ID=$TEAM_ID" >> .env
             echo "PROJ_SCHEME=$PROJ_SCHEME" >> .env
             echo "MAIN_TARGET=$MAIN_TARGET" >> .env
