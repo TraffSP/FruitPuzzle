@@ -3,15 +3,18 @@ NOTIF_PROJ_TARGET = "notificationsvc"
 BASE_BUNDLE = "com.barankalay"
 xcode_select "/Applications/Xcode-16.2.app"
 default_platform :ios
+
 platform :ios do
-  desc "Fetching or creating certificates in Apple Developer"
+  before_all do
+    setup_circle_ci if defined?(setup_circle_ci)
+  end
 
   desc "Removing old certificates and profiles"
   lane :remove_certs do
     api_key = app_store_connect_api_key(
       key_id: ENV['API_KEY_ID'],
       issuer_id: ENV['API_ISSUER_ID'],
-      key_filepath: "fastlane/provision/AuthKey.p8" # Прямий шлях відносно корня проекту
+      key_filepath: "fastlane/provision/AuthKey.p8"
     )
 
     match_nuke(
@@ -20,8 +23,7 @@ platform :ios do
       git_branch: "main",
       git_full_name: ENV['GIT_FULL_NAME'],
       git_user_email: ENV['GIT_USER_EMAIL'],
-      app_identifier: ["com.barankalay", "com.barankalay.#{NOTIF_PROJ_TARGET}"],
-      profile_name: ENV['MAIN_TARGET'],
+      app_identifier: [BASE_BUNDLE, "#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}"],
       output_path: 'fastlane/provision',
       readonly: false,
       skip_confirmation: true,
@@ -29,63 +31,85 @@ platform :ios do
     )
   end
 
+  desc "Fetching or creating certificates in Apple Developer"
   lane :manage_provision do
     api_key = app_store_connect_api_key(
       key_id: ENV['API_KEY_ID'],
       issuer_id: ENV['API_ISSUER_ID'],
       key_filepath: "fastlane/provision/AuthKey.p8"
     )
-    # Отримання або створення профілів для App Store (розповсюдження)
+    
+    # Основна програма
     match(
       type: "appstore",
       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
       git_branch: "main",
       git_full_name: ENV['GIT_FULL_NAME'],
       git_user_email: ENV['GIT_USER_EMAIL'],
-      app_identifier: ["com.barankalay", "com.barankalay.#{NOTIF_PROJ_TARGET}"],
-      profile_name: ENV['MAIN_TARGET'],
+      app_identifier: BASE_BUNDLE,
+      profile_name: "#{ENV['MAIN_TARGET']}-App",
+      output_path: 'fastlane/provision',
+      readonly: false,
+      api_key: api_key
+    )
+    
+    # Extension для сповіщень
+    match(
+      type: "appstore",
+      git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
+      git_branch: "main",
+      git_full_name: ENV['GIT_FULL_NAME'],
+      git_user_email: ENV['GIT_USER_EMAIL'],
+      app_identifier: "#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}",
+      profile_name: "#{ENV['MAIN_TARGET']}-Push",
       output_path: 'fastlane/provision',
       readonly: false,
       api_key: api_key
     )
   end
+
   desc "Updating project Team ID and Provision Profiles"
   lane :update_project do
-    update_code_signing_settings(
-    use_automatic_signing: false,
-    path: ENV['XCODE_PROJ'],
-    targets: ENV['MAIN_TARGET'],
-    team_id: ENV["TEAM_ID"],
-    bundle_identifier: BASE_BUNDLE,
-    code_sign_identity: "Apple Distribution",
-    profile_name: provisioning_profiles[BASE_BUNDLE]
-  )
-  
-  # Extension
-  update_code_signing_settings(
-    use_automatic_signing: false,
-    path: ENV['XCODE_PROJ'],
-    targets: NOTIF_PROJ_TARGET,
-    team_id: ENV["TEAM_ID"],
-    bundle_identifier: "#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}",
-    code_sign_identity: "Apple Distribution",
-    profile_name: provisioning_profiles["#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}"]
-  )
+    # Основний додаток
+    update_project_provisioning(
+      xcodeproj: ENV['XCODE_PROJ'],
+      profile: "fastlane/provision/AppStore_#{BASE_BUNDLE}.mobileprovision",
+      target_filter: ENV["MAIN_TARGET"]
+    )
+    
+    # Extension для сповіщень
+    update_project_provisioning(
+      xcodeproj: ENV['XCODE_PROJ'],
+      profile: "fastlane/provision/AppStore_#{BASE_BUNDLE}.#{NOTIF_PROJ_TARGET}.mobileprovision",
+      target_filter: NOTIF_PROJ_TARGET
+    )
+    
+    # Встановити Team ID для всіх таргетів
+    update_project_team(
+      path: ENV['XCODE_PROJ'],
+      targets: [ENV["MAIN_TARGET"], NOTIF_PROJ_TARGET],
+      teamid: ENV["TEAM_ID"]
+    )
   end
+
   desc "Build App without bitcode"
   lane :build do
+    # Видалити проблемні файли
+    sh "rm -rf ~/Library/Developer/Xcode/DerivedData"
     sh "find . -name 'Package.resolved' -exec rm {} \\;"
+    
     build_app(
-      scheme: "FruitPuzzle",
+      scheme: ENV['PROJ_SCHEME'] || "FruitPuzzle",
       project: ENV['XCODE_PROJ'],
       include_bitcode: false,
       include_symbols: false,
-      export_method: "app-store", # Вказуємо метод експорту для розповсюдження
-      configuration: "Release",    # Вказуємо конфігурацію збірки
-      xcargs: "-skipPackagePluginValidation"
+      export_method: "app-store",
+      configuration: "Release",
+      xcargs: "-skipPackagePluginValidation -allowProvisioningUpdates"
     )
   end
-  desc "Upload metadata, screenshots and build to App Store Connect, then submit for review"
+
+  desc "Upload metadata, screenshots and build to App Store Connect"
   lane :submit_build do
     deliver(
       skip_metadata: true,
@@ -120,20 +144,12 @@ platform :ios do
       force: true
     )
   end
+
   desc "Build, sign and upload a new build to the App Store."
-  desc "This will do the following:"
-  desc ""
-  desc "- Create new screenshots and store them in `./fastlane/screenshots`"
-  desc "- Collect the app metadata from `./fastlane/metadata`"
-  desc "- Upload screenshots + app metadata"
-  desc "- Build, sign and upload the app"
-  desc "- Submit the app for review"
   lane :appstore_submit do
-    # remove_certs
     manage_provision
     update_project
     build
     submit_build
   end
 end
-
