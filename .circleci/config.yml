@@ -24,7 +24,7 @@ workflows:
 jobs:
   appstore_submit:
     macos:
-      xcode: "14.2.0"
+      xcode: "15.0.0"
     
     environment:
       FL_OUTPUT_DIR: output
@@ -39,11 +39,23 @@ jobs:
       - run:
           name: Create .env file with secrets
           command: |
-            echo "APPLE_ID=$APPLE_ID" >> .env
-            echo "APP_IDENTIFIER=$APP_IDENTIFIER" >> .env
-            echo "TEAM_ID=$TEAM_ID" >> .env
-            echo "MATCH_PASSWORD=$MATCH_PASSWORD" >> .env
+            echo "FASTLANE_USER=$FASTLANE_USER" >> .env
+            echo "FASTLANE_PASSWORD=$FASTLANE_PASSWORD" >> .env
             echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD=$FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD" >> .env
+            echo "BASE_BUNDLE=$BASE_BUNDLE" >> .env
+            echo "TEAM_ID=$TEAM_ID" >> .env
+            echo "PROJ_SCHEME=$PROJ_SCHEME" >> .env
+            echo "NOTIF_PROJ_TARGET=$NOTIF_PROJ_TARGET" >> .env
+            echo "MAIN_TARGET=$MAIN_TARGET" >> .env
+            echo "XCODE_PROJ=$XCODE_PROJ" >> .env
+            echo "APPSTORE_APP_VER=$APPSTORE_APP_VER" >> .env
+            echo "API_KEY_ID=$API_KEY_ID" >> .env
+            echo "API_ISSUER_ID=$API_ISSUER_ID" >> .env
+            echo "API_KEY_FILEPATH=$API_KEY_FILEPATH" >> .env
+            echo "MATCH_GIT_TOKEN=$MATCH_GIT_TOKEN" >> .env
+            echo "MATCH_PASSWORD=$MATCH_PASSWORD" >> .env
+            echo "GIT_FULL_NAME=$GIT_FULL_NAME" >> .env
+            echo "GIT_USER_EMAIL=$GIT_USER_EMAIL" >> .env
       
       - run:
           name: Run Fastlane
