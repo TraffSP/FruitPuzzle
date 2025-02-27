@@ -28,7 +28,7 @@ jobs:
     
     environment:
       FL_OUTPUT_DIR: output
-      FASTLANE_LANE: << pipeline.parameters.deploy-type >>
+      FASTLANE_LANE: appstore_submit
     
     steps:
       - checkout
