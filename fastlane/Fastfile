@@ -16,10 +16,10 @@ platform :ios do
     match_nuke(
       type: "appstore",
       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
-      git_branch: ENV['PROJ_SCHEME'],
+      git_branch: "main",
       git_full_name: ENV['GIT_FULL_NAME'],
       git_user_email: ENV['GIT_USER_EMAIL'],
-      app_identifier: [ENV['BASE_BUNDLE'], "#{ENV['BASE_BUNDLE']}.#{NOTIF_PROJ_TARGET}"],
+      app_identifier: ["com.barankalay", "com.barankalay.#{NOTIF_PROJ_TARGET}"],
       profile_name: ENV['MAIN_TARGET'],
       output_path: 'fastlane/provision',
       readonly: false,
@@ -38,10 +38,10 @@ platform :ios do
     match(
       type: "appstore",
       git_url: "https://#{ENV['MATCH_GIT_TOKEN']}@github.com/TraffSP/FruitPuzzle",
-      git_branch: ENV['PROJ_SCHEME'],
+      git_branch: "main",
       git_full_name: ENV['GIT_FULL_NAME'],
       git_user_email: ENV['GIT_USER_EMAIL'],
-      app_identifier: [ENV['BASE_BUNDLE'], "#{ENV['BASE_BUNDLE']}.#{NOTIF_PROJ_TARGET}"],
+      app_identifier: ["com.barankalay", "com.barankalay.#{NOTIF_PROJ_TARGET}"],
       profile_name: ENV['MAIN_TARGET'],
       output_path: 'fastlane/provision',
       readonly: false,
@@ -63,7 +63,7 @@ platform :ios do
   desc "Build App without bitcode"
   lane :build do
     build_app(
-      scheme: ENV['PROJ_SCHEME'],
+      scheme: "main",
       project: ENV['XCODE_PROJ'],
       include_bitcode: false,
       include_symbols: false,
