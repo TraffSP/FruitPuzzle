@@ -24,7 +24,7 @@ workflows:
 jobs:
   appstore_submit:
     macos:
-      xcode: "15.0.0"
+      xcode: "16.2.0"
     
     environment:
       FL_OUTPUT_DIR: output

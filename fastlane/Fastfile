@@ -69,7 +69,8 @@ platform :ios do
       include_bitcode: false,
       include_symbols: false,
       export_method: "app-store", # Вказуємо метод експорту для розповсюдження
-      configuration: "Release"    # Вказуємо конфігурацію збірки
+      configuration: "Release",    # Вказуємо конфігурацію збірки
+      xcargs: "-skipPackagePluginValidation"
     )
   end
   desc "Upload metadata, screenshots and build to App Store Connect, then submit for review"
