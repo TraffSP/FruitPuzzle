@@ -62,8 +62,9 @@ platform :ios do
   end
   desc "Build App without bitcode"
   lane :build do
+    sh "find . -name 'Package.resolved' -exec rm {} \\;"
     build_app(
-      scheme: ENV['PROJ_SCHEME'],
+      scheme: "FruitPuzzle",
       project: ENV['XCODE_PROJ'],
       include_bitcode: false,
       include_symbols: false,
